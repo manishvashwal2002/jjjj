@@ -1,0 +1,92 @@
+pipeline {
+    agent any
+
+    environment {
+        DIRECTORY_PATH = "https://github.com/manishvashwal2002/jenkinstestfile.git"
+        TESTING_ENVIRONMENT = "test"
+        PRODUCTION_ENVIRONMENT = "manish_vashwal"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building the code using a build automation tool (e.g., Maven)"
+                echo "Using file path: ${env.DIRECTORY_PATH}"
+                // Use Maven to build and package your code
+                // Example: mvn clean package
+            }
+        }
+
+        stage('Unit and Integration Tests') {
+            steps {
+                echo "Running unit tests"
+                // Run unit tests
+                // Example: mvn test
+
+                echo "Running integration tests using a relevant tool (e.g., Postman or JMeter)"
+                // Run integration tests using a relevant tool
+                // Example: postman run your-collection.json
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                echo "Analyzing the code using a code analysis tool (e.g., SonarQube)"
+                // Integrate code analysis tool (e.g., SonarQube)
+                // Example: sonar-scanner
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                echo "Performing a security scan using a relevant tool (e.g., OWASP ZAP)"
+                // Perform security scan using a relevant tool
+                // Example: owasp-zap-cli -c your-scan-policy.policy -t http://your-app-url
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploying the application to a staging server (e.g., AWS EC2 instance)"
+                // Deploy to staging server using deployment tool (e.g., AWS CodeDeploy)
+                // Example: aws deploy create-deployment --application-name MyApp --deployment-group-name Staging --s3-location s3://your-bucket/your-app.zip
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo "Running integration tests on the staging environment"
+                // Run integration tests on the staging environment
+                // Use a relevant tool (e.g., Postman or JMeter)
+                // Example: postman run your-collection-staging.json
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploying the application to a production server (e.g., AWS EC2 instance)"
+                // Deploy to production server using deployment tool (e.g., AWS CodeDeploy)
+                // Example: aws deploy create-deployment --application-name MyApp --deployment-group-name Production --s3-location s3://your-bucket/your-app.zip
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo "Sending email notification: Pipeline Failed"
+            mail(
+                subject: 'Pipeline Failed',
+                body: "The Jenkins pipeline for your project has failed. Please check the logs for details.",
+                to: "manivashwal@gmail.com"
+            )
+        }
+        success {
+            echo "Sending email notification: Pipeline Succeeded"
+            mail(
+                subject: 'Pipeline Succeeded',
+                body: "The Jenkins pipeline for your project has succeeded.",
+                to: "manivashwal@gmail.com"
+            )
+        }
+    }
+}
